@@ -115,6 +115,26 @@ export function NaverMap({ providers, selectedId, onMarkerClick }: NaverMapProps
       const marker = new naver.maps.Marker({
         position,
         map,
+        icon: {
+          content: `<div style="
+            padding:3px 8px;
+            background:white;
+            color:#222;
+            border-radius:6px;
+            font-size:11px;
+            font-weight:700;
+            box-shadow:0 2px 8px rgba(0,0,0,0.18);
+            white-space:nowrap;
+            cursor:pointer;
+            font-family:'Pretendard Variable',sans-serif;
+            border:1px solid #e5e5e5;
+            transform:translateY(-10px);
+          ">
+            ${provider.name}
+            <span style="color:#f59e0b;margin-left:3px">★${provider.rating}</span>
+          </div>`,
+          anchor: new naver.maps.Point(50, 40),
+        },
       });
 
       naver.maps.Event.addListener(marker, "click", () => {
