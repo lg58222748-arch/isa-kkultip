@@ -45,33 +45,16 @@ const sortOptions: { value: SortMode; label: string; icon: React.ReactNode }[] =
 ];
 
 const REGIONS = [
-  { value: "all", label: "전국" },
-  { value: "서울", label: "서울" },
-  { value: "부산", label: "부산" },
-  { value: "대구", label: "대구" },
-  { value: "인천", label: "인천" },
-  { value: "광주", label: "광주" },
-  { value: "대전", label: "대전" },
-  { value: "울산", label: "울산" },
-  { value: "세종", label: "세종" },
-  { value: "수원", label: "수원" },
-  { value: "용인", label: "용인" },
-  { value: "성남", label: "성남" },
-  { value: "고양", label: "고양" },
-  { value: "화성", label: "화성" },
-  { value: "천안", label: "천안" },
-  { value: "아산", label: "아산" },
-  { value: "평택", label: "평택" },
-  { value: "전주", label: "전주" },
-  { value: "청주", label: "청주" },
-  { value: "창원", label: "창원" },
-  { value: "제주", label: "제주" },
+  "서울", "부산", "대구", "인천", "광주", "대전", "울산", "세종",
+  "수원", "용인", "성남", "고양", "화성", "천안", "아산", "평택",
+  "전주", "청주", "창원", "김해", "제주", "포항", "남양주", "안산",
+  "안양", "하남", "김포", "파주", "의정부", "춘천", "강릉", "여수",
 ];
 
 export function MapPageClient() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [categoryFilter, setCategoryFilter] = useState("all");
-  const [regionFilter, setRegionFilter] = useState("all");
+  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
   const [searchText, setSearchText] = useState("");
   const [sortMode, setSortMode] = useState<SortMode>("rating");
   const [showDetail, setShowDetail] = useState(false);
@@ -83,8 +66,10 @@ export function MapPageClient() {
       ? [...providers]
       : providers.filter((p) => p.category === categoryFilter);
 
-    if (regionFilter !== "all") {
-      list = list.filter((p) => p.region.some((r) => r.includes(regionFilter)));
+    if (selectedRegions.length > 0) {
+      list = list.filter((p) =>
+        selectedRegions.some((sr) => p.region.some((r) => r.includes(sr)) || p.address.includes(sr))
+      );
     }
 
     if (searchText.trim()) {
@@ -108,8 +93,8 @@ export function MapPageClient() {
     });
 
     // 2000개 중 최대 200개만 표시 (성능)
-    return list.slice(0, 500);
-  }, [categoryFilter, regionFilter, searchText, sortMode, onlyVerified]);
+    return list.slice(0, 1000);
+  }, [categoryFilter, selectedRegions, searchText, sortMode, onlyVerified]);
 
   const selectedProvider = useMemo(
     () => providers.find((p) => p.id === selectedId) ?? null,
@@ -141,32 +126,52 @@ export function MapPageClient() {
     <div className="flex h-[calc(100vh-4rem)] flex-col lg:flex-row">
       {/* Sidebar */}
       <div className="order-2 flex h-[50%] w-full flex-col border-t border-border/60 lg:order-1 lg:h-full lg:w-[400px] lg:border-r lg:border-t-0">
-        {/* Search + Region */}
+        {/* Search */}
         <div className="border-b border-border/60 p-3">
-          <div className="flex gap-2">
-            <div className="relative flex-1">
-              <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
-              <input
-                type="text"
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-                placeholder="업체명·지역 검색"
-                className="w-full rounded-lg border border-input bg-background py-1.5 pl-8 pr-3 text-xs outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-              />
-            </div>
-            <select
-              value={regionFilter}
-              onChange={(e) => {
-                setRegionFilter(e.target.value);
-                setSelectedId(null);
-                setShowDetail(false);
-              }}
-              className="rounded-lg border border-input bg-background px-2 py-1.5 text-xs outline-none focus:border-primary"
+          <div className="relative">
+            <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="text"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              placeholder="업체명·지역 검색"
+              className="w-full rounded-lg border border-input bg-background py-1.5 pl-8 pr-3 text-xs outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+            />
+          </div>
+        </div>
+
+        {/* Region Multi-Select */}
+        <div className="border-b border-border/60 p-2">
+          <div className="flex flex-wrap gap-1">
+            <button
+              onClick={() => { setSelectedRegions([]); setSelectedId(null); setShowDetail(false); }}
+              className={`rounded-full px-2 py-0.5 text-[10px] font-medium transition-colors ${
+                selectedRegions.length === 0
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground hover:bg-accent"
+              }`}
             >
-              {REGIONS.map((r) => (
-                <option key={r.value} value={r.value}>{r.label}</option>
-              ))}
-            </select>
+              전국
+            </button>
+            {REGIONS.map((r) => (
+              <button
+                key={r}
+                onClick={() => {
+                  setSelectedRegions((prev) =>
+                    prev.includes(r) ? prev.filter((x) => x !== r) : [...prev, r]
+                  );
+                  setSelectedId(null);
+                  setShowDetail(false);
+                }}
+                className={`rounded-full px-2 py-0.5 text-[10px] font-medium transition-colors ${
+                  selectedRegions.includes(r)
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted text-muted-foreground hover:bg-accent"
+                }`}
+              >
+                {r}
+              </button>
+            ))}
           </div>
         </div>
 
