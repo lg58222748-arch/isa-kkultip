@@ -93,7 +93,7 @@ export function MapPageClient() {
     });
 
     // 2000개 중 최대 200개만 표시 (성능)
-    return list.slice(0, 1000);
+    return list;
   }, [categoryFilter, selectedRegions, searchText, sortMode, onlyVerified]);
 
   const selectedProvider = useMemo(
@@ -143,16 +143,6 @@ export function MapPageClient() {
         {/* Region Multi-Select */}
         <div className="border-b border-border/60 p-2">
           <div className="flex flex-wrap gap-1">
-            <button
-              onClick={() => { setSelectedRegions([]); setSelectedId(null); setShowDetail(false); }}
-              className={`rounded-full px-2 py-0.5 text-[10px] font-medium transition-colors ${
-                selectedRegions.length === 0
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-muted text-muted-foreground hover:bg-accent"
-              }`}
-            >
-              전국
-            </button>
             {REGIONS.map((r) => (
               <button
                 key={r}

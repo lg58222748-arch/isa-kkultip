@@ -45,9 +45,12 @@ export function NaverMap({ providers, selectedId, onMarkerClick }: NaverMapProps
     if (!loaded || !mapRef.current || mapInstanceRef.current) return;
     const naver = window.naver;
 
+    // 기본 서울 중심
+    const defaultCenter = new naver.maps.LatLng(37.5, 127.0);
+
     const map = new naver.maps.Map(mapRef.current, {
-      center: new naver.maps.LatLng(37.5, 127.0),
-      zoom: 10,
+      center: defaultCenter,
+      zoom: 12,
       zoomControl: true,
       zoomControlOptions: {
         position: naver.maps.Position.TOP_RIGHT,
@@ -55,6 +58,31 @@ export function NaverMap({ providers, selectedId, onMarkerClick }: NaverMapProps
     });
 
     mapInstanceRef.current = map;
+
+    // 브라우저 GPS로 현재 위치 이동
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const userLat = pos.coords.latitude;
+          const userLng = pos.coords.longitude;
+          map.setCenter(new naver.maps.LatLng(userLat, userLng));
+          map.setZoom(13);
+        },
+        () => {
+          // GPS 실패 시 IP 기반 위치 시도
+          fetch("https://ipapi.co/json/")
+            .then((r) => r.json())
+            .then((data) => {
+              if (data.latitude && data.longitude) {
+                map.setCenter(new naver.maps.LatLng(data.latitude, data.longitude));
+                map.setZoom(12);
+              }
+            })
+            .catch(() => {});
+        },
+        { timeout: 3000 }
+      );
+    }
   }, [loaded]);
 
   // 마커 렌더링
