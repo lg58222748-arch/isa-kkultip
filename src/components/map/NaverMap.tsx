@@ -33,7 +33,7 @@ export function NaverMap({ providers, selectedId, onMarkerClick }: NaverMapProps
     if (window.naver?.maps?.Map) { setLoaded(true); return; }
 
     const script = document.createElement("script");
-    script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${clientId}`;
+    script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${clientId}`;
     script.async = true;
     script.onload = () => setLoaded(true);
     script.onerror = () => setError(true);
