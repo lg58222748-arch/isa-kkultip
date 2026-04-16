@@ -41,6 +41,7 @@ export default function RootLayout({
     <html lang="ko" className="h-full antialiased">
       <head>
         <meta name="google-site-verification" content="iDRe3CiN0XvKr8qifCjvDGLGKzYDgQXwEz0r8SXGETs" />
+        <meta name="naver-site-verification" content="49944c5bc078683774a958e77243566a5c901e48" />
         <link
           rel="stylesheet"
           as="style"
