@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback } from "react";
 import { providers } from "@/data/providers";
-import { KakaoMap } from "@/components/map/KakaoMap";
+import { NaverMap } from "@/components/map/NaverMap";
 import { ProviderDetail } from "@/components/map/ProviderDetail";
 import {
   Star,
@@ -378,7 +378,7 @@ export function MapPageClient() {
 
       {/* Map Area */}
       <div className="relative order-1 h-[50%] flex-1 lg:order-2 lg:h-full">
-        <KakaoMap
+        <NaverMap
           providers={filteredProviders}
           selectedId={selectedId}
           onMarkerClick={handleSelect}

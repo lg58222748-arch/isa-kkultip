@@ -7,7 +7,7 @@ import type { Provider } from "@/types/provider";
 
 declare global {
   interface Window {
-    kakao: any;
+    naver: any;
   }
 }
 
@@ -22,54 +22,43 @@ export function MapBanner({
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    const apiKey = process.env.NEXT_PUBLIC_KAKAO_MAP_KEY;
-    if (!apiKey || apiKey.includes("여기에")) return;
+    const clientId = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID;
+    if (!clientId) return;
 
-    if (window.kakao?.maps?.Map) {
-      setLoaded(true);
-      return;
-    }
-    if (window.kakao?.maps) {
-      window.kakao.maps.load(() => setLoaded(true));
-      return;
-    }
+    if (window.naver?.maps?.Map) { setLoaded(true); return; }
 
     const script = document.createElement("script");
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false`;
+    script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${clientId}`;
     script.async = true;
-    script.onload = () => {
-      window.kakao.maps.load(() => setLoaded(true));
-    };
+    script.onload = () => setLoaded(true);
     document.head.appendChild(script);
   }, []);
 
   useEffect(() => {
     if (!loaded || !mapRef.current) return;
-    const kakao = window.kakao;
+    const naver = window.naver;
 
-    const map = new kakao.maps.Map(mapRef.current, {
-      center: new kakao.maps.LatLng(37.50, 126.95),
-      level: 9,
+    const map = new naver.maps.Map(mapRef.current, {
+      center: new naver.maps.LatLng(37.50, 126.95),
+      zoom: 11,
       draggable: false,
-      scrollwheel: false,
+      scrollWheel: false,
       disableDoubleClickZoom: true,
+      keyboardShortcuts: false,
     });
 
     providers.forEach((p) => {
-      const position = new kakao.maps.LatLng(p.lat, p.lng);
-      const marker = new kakao.maps.Marker({ position, map });
-
-      const content = `
-        <div style="padding:2px 6px;background:white;border-radius:4px;font-size:10px;font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,0.15);white-space:nowrap;font-family:'Pretendard Variable',sans-serif;border:1px solid #e5e5e5;">
-          ${p.name} <span style="color:#f59e0b">★${p.rating}</span>
-        </div>
-      `;
-      const overlay = new kakao.maps.CustomOverlay({
+      const position = new naver.maps.LatLng(p.lat, p.lng);
+      new naver.maps.Marker({
         position,
-        content,
-        yAnchor: 2.5,
+        map,
+        icon: {
+          content: `<div style="padding:2px 6px;background:white;border-radius:4px;font-size:10px;font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,0.15);white-space:nowrap;font-family:'Pretendard Variable',sans-serif;border:1px solid #e5e5e5;">
+            ${p.name} <span style="color:#f59e0b">★${p.rating}</span>
+          </div>`,
+          anchor: new naver.maps.Point(40, 30),
+        },
       });
-      overlay.setMap(map);
     });
   }, [loaded, providers]);
 
@@ -79,13 +68,10 @@ export function MapBanner({
       className="group relative block overflow-hidden rounded-2xl border border-border/60 transition-all hover:border-primary/40 hover:shadow-lg"
     >
       <div className="relative h-[250px] w-full">
-        {/* 카카오맵 실제 지도 */}
         <div ref={mapRef} className="h-full w-full" />
-
-        {/* 로딩 전 또는 키 없을 때 폴백 배경 */}
         {!loaded && <div className="absolute inset-0 bg-[#f0ebe3]" />}
 
-        {/* 상단 후킹 텍스트 */}
+        {/* 상단 후킹 */}
         <div className="absolute left-0 right-0 top-0 z-10 bg-gradient-to-b from-black/50 to-transparent px-5 pb-8 pt-4 pointer-events-none">
           <p className="text-xs font-semibold text-white/90 sm:text-sm">
             🔍 이사할 동네를 검색해보세요
