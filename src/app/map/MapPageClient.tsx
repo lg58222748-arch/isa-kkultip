@@ -140,6 +140,14 @@ export function MapPageClient() {
         {/* Region Multi-Select */}
         <div className="border-b border-border/60 p-2">
           <div className="flex flex-wrap gap-1">
+            {selectedRegions.length > 0 && (
+              <button
+                onClick={() => { setSelectedRegions([]); setSelectedId(null); setShowDetail(false); }}
+                className="rounded-full bg-destructive/10 px-2 py-0.5 text-[10px] font-medium text-destructive hover:bg-destructive/20"
+              >
+                ✕ 전체해제
+              </button>
+            )}
             {REGIONS.map((r) => (
               <button
                 key={r}
