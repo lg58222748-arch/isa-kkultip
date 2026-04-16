@@ -28,7 +28,16 @@
       "WebFetch(domain:auctions.godaddy.com)",
       "mcp__Claude_in_Chrome__navigate",
       "mcp__Claude_in_Chrome__computer",
-      "mcp__Claude_in_Chrome__find"
+      "mcp__Claude_in_Chrome__find",
+      "Bash(npx vercel:*)",
+      "Bash(nslookup isamove.co.kr)",
+      "Bash(curl -sI https://isamove.co.kr)",
+      "Bash(curl -v https://isamove.co.kr)",
+      "Bash(curl -sk https://isamove.co.kr)",
+      "Bash(curl -s http://isamove.co.kr)",
+      "Bash(curl -sI http://isamove.co.kr)",
+      "mcp__Claude_in_Chrome__get_page_text",
+      "mcp__Claude_in_Chrome__javascript_tool"
     ]
   }
 }

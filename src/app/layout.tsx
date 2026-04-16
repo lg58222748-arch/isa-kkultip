@@ -40,6 +40,7 @@ export default function RootLayout({
   return (
     <html lang="ko" className="h-full antialiased">
       <head>
+        <meta name="google-site-verification" content="iDRe3CiN0XvKr8qifCjvDGLGKzYDgQXwEz0r8SXGETs" />
         <link
           rel="stylesheet"
           as="style"
