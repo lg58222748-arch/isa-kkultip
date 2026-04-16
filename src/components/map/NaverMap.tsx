@@ -21,15 +21,16 @@ export function NaverMap({ providers, selectedId, onMarkerClick }: NaverMapProps
   const mapInstanceRef = useRef<any>(null);
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
-  const markersRef = useRef<any[]>([]);
-  const overlaysRef = useRef<any[]>([]);
+  // 모든 마커를 한번만 생성하고 재사용
+  const allMarkersRef = useRef<Map<string, any>>(new Map());
+  const allOverlaysRef = useRef<Map<string, any>>(new Map());
+  const initializedRef = useRef(false);
   const stableOnMarkerClick = useCallback(onMarkerClick, [onMarkerClick]);
 
   // 네이버맵 스크립트 로드
   useEffect(() => {
     const clientId = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID;
     if (!clientId) { setError(true); return; }
-
     if (window.naver?.maps?.Map) { setLoaded(true); return; }
 
     const script = document.createElement("script");
@@ -40,36 +41,26 @@ export function NaverMap({ providers, selectedId, onMarkerClick }: NaverMapProps
     document.head.appendChild(script);
   }, []);
 
-  // 지도 초기화
+  // 지도 초기화 + GPS
   useEffect(() => {
     if (!loaded || !mapRef.current || mapInstanceRef.current) return;
     const naver = window.naver;
 
-    // 기본 서울 중심
-    const defaultCenter = new naver.maps.LatLng(37.5, 127.0);
-
     const map = new naver.maps.Map(mapRef.current, {
-      center: defaultCenter,
+      center: new naver.maps.LatLng(37.5, 127.0),
       zoom: 12,
       zoomControl: true,
-      zoomControlOptions: {
-        position: naver.maps.Position.TOP_RIGHT,
-      },
+      zoomControlOptions: { position: naver.maps.Position.TOP_RIGHT },
     });
-
     mapInstanceRef.current = map;
 
-    // 브라우저 GPS로 현재 위치 이동
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
-          const userLat = pos.coords.latitude;
-          const userLng = pos.coords.longitude;
-          map.setCenter(new naver.maps.LatLng(userLat, userLng));
+          map.setCenter(new naver.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
           map.setZoom(13);
         },
         () => {
-          // GPS 실패 시 IP 기반 위치 시도
           fetch("https://ipapi.co/json/")
             .then((r) => r.json())
             .then((data) => {
@@ -85,19 +76,21 @@ export function NaverMap({ providers, selectedId, onMarkerClick }: NaverMapProps
     }
   }, [loaded]);
 
-  // 마커 렌더링
+  // 마커 표시/숨기기 (필터 변경 시 - 가볍게)
   useEffect(() => {
     const map = mapInstanceRef.current;
     if (!map || !loaded) return;
     const naver = window.naver;
 
-    // 기존 마커/오버레이 제거
-    markersRef.current.forEach((m) => m.setMap(null));
-    overlaysRef.current.forEach((o) => o.setMap(null));
-    markersRef.current = [];
-    overlaysRef.current = [];
+    const visibleIds = new Set(providers.map((p) => p.id));
 
-    // 겹침 방지
+    // 기존 마커 숨기기/보이기
+    allMarkersRef.current.forEach((marker, id) => {
+      const visible = visibleIds.has(id);
+      marker.setVisible(visible);
+    });
+
+    // 아직 생성 안 된 마커만 새로 생성
     const coordCount: Record<string, number> = {};
     function spreadPosition(lat: number, lng: number) {
       const key = `${lat.toFixed(2)}_${lng.toFixed(2)}`;
@@ -113,6 +106,8 @@ export function NaverMap({ providers, selectedId, onMarkerClick }: NaverMapProps
     }
 
     providers.forEach((provider) => {
+      if (allMarkersRef.current.has(provider.id)) return; // 이미 있으면 스킵
+
       const pos = spreadPosition(provider.lat, provider.lng);
       const position = new naver.maps.LatLng(pos.lat, pos.lng);
       const isSelected = provider.id === selectedId;
@@ -146,7 +141,7 @@ export function NaverMap({ providers, selectedId, onMarkerClick }: NaverMapProps
         stableOnMarkerClick(provider.id);
       });
 
-      markersRef.current.push(marker);
+      allMarkersRef.current.set(provider.id, marker);
     });
   }, [loaded, providers, selectedId, stableOnMarkerClick]);
 
