@@ -306,17 +306,13 @@ export function MapPageClient() {
                     : "hover:bg-accent/30"
                 }`}
               >
-                <div className="relative flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10 text-sm font-bold text-primary">
-                  {provider.name.charAt(0)}
-                  {/* Rank badge */}
-                  {index < 3 && sortMode === "rating" && (
-                    <span className={`absolute -left-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold text-white ${
-                      index === 0 ? "bg-amber-500" : index === 1 ? "bg-gray-400" : "bg-amber-700"
-                    }`}>
-                      {index + 1}
-                    </span>
-                  )}
-                </div>
+                {index < 3 && sortMode === "rating" && (
+                  <span className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-[9px] font-bold text-white ${
+                    index === 0 ? "bg-amber-500" : index === 1 ? "bg-gray-400" : "bg-amber-700"
+                  }`}>
+                    {index + 1}
+                  </span>
+                )}
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1.5">
                     <span className="text-sm font-bold text-foreground">
