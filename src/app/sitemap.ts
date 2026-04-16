@@ -3,7 +3,7 @@ import { blogPosts } from "@/data/blog-posts";
 import { newApartmentSteps } from "@/data/new-apartment-steps";
 import { oldApartmentSteps } from "@/data/old-apartment-steps";
 
-const BASE_URL = "https://example.com";
+const BASE_URL = "https://isamove.co.kr";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [
