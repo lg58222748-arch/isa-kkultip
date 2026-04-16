@@ -25,7 +25,6 @@ import { AdSlot } from "@/components/ads/AdSlot";
 type SortMode = "rating" | "reviews" | "price-low" | "price-high";
 
 const categoryOptions = [
-  { value: "all", label: "전체", icon: "📋" },
   { value: "inspection", label: "사전점검", icon: "🔍" },
   { value: "elastic-coat", label: "탄성코트", icon: "🎨" },
   { value: "grout", label: "줄눈시공", icon: "🔲" },
@@ -62,9 +61,7 @@ export function MapPageClient() {
   const [showCompare, setShowCompare] = useState(false);
 
   const filteredProviders = useMemo(() => {
-    let list = categoryFilter === "all"
-      ? [...providers]
-      : providers.filter((p) => p.category === categoryFilter);
+    let list = providers.filter((p) => p.category === categoryFilter);
 
     if (selectedRegions.length > 0) {
       list = list.filter((p) =>
@@ -223,16 +220,10 @@ export function MapPageClient() {
         {/* Stats Bar */}
         <div className="flex items-center gap-3 border-b border-border/40 bg-muted/30 px-3 py-2 text-[11px] text-muted-foreground">
           <span>{filteredProviders.length}개 업체</span>
-          {categoryFilter !== "all" && lowestByCategory[categoryFilter] && (
+          {lowestByCategory[categoryFilter] && (
             <span className="inline-flex items-center gap-1 text-primary">
               <TrendingDown className="h-3 w-3" />
               최저가 {lowestByCategory[categoryFilter].priceLabel}
-            </span>
-          )}
-          {categoryFilter === "all" && (
-            <span className="inline-flex items-center gap-1">
-              <Trophy className="h-3 w-3 text-amber-500" />
-              평점 TOP: {top3[0]?.name} ({top3[0]?.rating})
             </span>
           )}
           <button
@@ -293,7 +284,7 @@ export function MapPageClient() {
         <div className="flex-1 overflow-y-auto">
           {filteredProviders.map((provider, index) => {
             const isSelected = provider.id === selectedId;
-            const isLowest = categoryFilter !== "all" && lowestByCategory[categoryFilter]?.id === provider.id;
+            const isLowest = lowestByCategory[categoryFilter]?.id === provider.id;
             const isTop = index === 0 && sortMode === "rating";
 
             return (
