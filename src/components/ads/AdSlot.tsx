@@ -10,8 +10,8 @@
  * 5. Auto Ads도 AdSense 대시보드에서 켜기 (추가 수익)
  */
 
-const ADSENSE_CLIENT_ID = "ca-pub-XXXXXXXXXXXXXXXX";
-const IS_PRODUCTION = false;
+const ADSENSE_CLIENT_ID = "ca-pub-6524877471660554";
+const IS_PRODUCTION = false; // 애드센스 승인 후 true로 변경
 
 type AdFormat =
   | "horizontal"     // 가로 배너 (728x90) — 섹션 사이

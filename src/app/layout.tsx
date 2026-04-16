@@ -42,6 +42,7 @@ export default function RootLayout({
       <head>
         <meta name="google-site-verification" content="rg-w1sgAAAU7c5sOivyOUCOTqFlEdX00vkEP0_AIJ_I" />
         <meta name="naver-site-verification" content="49944c5bc078683774a958e77243566a5c901e48" />
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6524877471660554" crossOrigin="anonymous" />
         <link
           rel="stylesheet"
           as="style"
