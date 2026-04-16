@@ -53,7 +53,7 @@ const REGIONS = [
 export function MapPageClient() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [categoryFilter, setCategoryFilter] = useState("moving");
-  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+  const [selectedRegions, setSelectedRegions] = useState<string[]>(["서울"]);
   const [searchText, setSearchText] = useState("");
   const [sortMode, setSortMode] = useState<SortMode>("rating");
   const [showDetail, setShowDetail] = useState(false);
