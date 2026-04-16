@@ -25,15 +25,15 @@ import { AdSlot } from "@/components/ads/AdSlot";
 type SortMode = "rating" | "reviews" | "price-low" | "price-high";
 
 const categoryOptions = [
+  { value: "moving", label: "포장이사", icon: "📦" },
+  { value: "cleaning", label: "입주청소", icon: "🧹" },
+  { value: "grout", label: "줄눈시공", icon: "🔲" },
+  { value: "interior", label: "인테리어", icon: "🏠" },
   { value: "inspection", label: "사전점검", icon: "🔍" },
   { value: "elastic-coat", label: "탄성코트", icon: "🎨" },
-  { value: "grout", label: "줄눈시공", icon: "🔲" },
-  { value: "cleaning", label: "입주청소", icon: "🧹" },
-  { value: "sick-house", label: "새집증후군", icon: "🌿" },
   { value: "coating", label: "나노코팅", icon: "✨" },
+  { value: "sick-house", label: "새집증후군", icon: "🌿" },
   { value: "thermal-film", label: "단열필름", icon: "🪟" },
-  { value: "moving", label: "포장이사", icon: "📦" },
-  { value: "interior", label: "인테리어", icon: "🏠" },
 ];
 
 const sortOptions: { value: SortMode; label: string; icon: React.ReactNode }[] = [
