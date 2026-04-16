@@ -60,6 +60,7 @@ const REGIONS = [
   { value: "고양", label: "고양" },
   { value: "화성", label: "화성" },
   { value: "천안", label: "천안" },
+  { value: "아산", label: "아산" },
   { value: "평택", label: "평택" },
   { value: "전주", label: "전주" },
   { value: "청주", label: "청주" },
@@ -107,7 +108,7 @@ export function MapPageClient() {
     });
 
     // 2000개 중 최대 200개만 표시 (성능)
-    return list.slice(0, 200);
+    return list.slice(0, 500);
   }, [categoryFilter, regionFilter, searchText, sortMode, onlyVerified]);
 
   const selectedProvider = useMemo(
