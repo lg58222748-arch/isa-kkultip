@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Clock, Tag } from "lucide-react";
@@ -53,49 +54,49 @@ export default function BlogPage() {
       {/* Blog Post List */}
       <div className="flex flex-col gap-4">
         {blogPosts.map((post, index) => (
-          <>{index === 3 && <InFeedAd slot="blog-list-infeed-1" />}
-          {index === 7 && <InFeedAd slot="blog-list-infeed-2" />}
-          <Link
-            key={post.slug}
-            href={`/blog/${post.slug}`}
-            className="group rounded-xl border border-border/60 bg-card p-5 transition-all hover:border-primary/30 hover:shadow-sm"
-          >
-            <div className="flex items-center gap-2">
-              <span
-                className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
-                  categoryColors[post.category] ?? "bg-muted text-muted-foreground"
-                }`}
-              >
-                {post.category}
-              </span>
-              <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                <Clock className="h-3 w-3" />
-                {post.readTime} 읽기
-              </span>
-              <span className="text-xs text-muted-foreground">
-                {post.date}
-              </span>
-            </div>
-            <h2 className="mt-2 text-base font-bold text-foreground group-hover:text-primary sm:text-lg">
-              {post.title}
-            </h2>
-            <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground line-clamp-2">
-              {post.description}
-            </p>
-            <div className="mt-3 flex flex-wrap gap-1.5">
-              {post.tags.slice(0, 4).map((tag) => (
-                <Badge
-                  key={tag}
-                  variant="outline"
-                  className="text-[10px] font-normal"
+          <Fragment key={post.slug}>
+            {index === 3 && <InFeedAd slot="blog-list-infeed-1" />}
+            {index === 7 && <InFeedAd slot="blog-list-infeed-2" />}
+            <Link
+              href={`/blog/${post.slug}`}
+              className="group rounded-xl border border-border/60 bg-card p-5 transition-all hover:border-primary/30 hover:shadow-sm"
+            >
+              <div className="flex items-center gap-2">
+                <span
+                  className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                    categoryColors[post.category] ?? "bg-muted text-muted-foreground"
+                  }`}
                 >
-                  <Tag className="mr-0.5 h-2.5 w-2.5" />
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          </Link>
-          </>
+                  {post.category}
+                </span>
+                <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <Clock className="h-3 w-3" />
+                  {post.readTime} 읽기
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  {post.date}
+                </span>
+              </div>
+              <h2 className="mt-2 text-base font-bold text-foreground group-hover:text-primary sm:text-lg">
+                {post.title}
+              </h2>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground line-clamp-2">
+                {post.description}
+              </p>
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {post.tags.slice(0, 4).map((tag) => (
+                  <Badge
+                    key={tag}
+                    variant="outline"
+                    className="text-[10px] font-normal"
+                  >
+                    <Tag className="mr-0.5 h-2.5 w-2.5" />
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            </Link>
+          </Fragment>
         ))}
       </div>
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { FloatingMatchButton } from "@/components/FloatingMatchButton";
+import { Logo } from "@/components/Logo";
 
 export const metadata: Metadata = {
   title: {
@@ -64,11 +65,8 @@ function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/95 backdrop-blur-sm">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <a href="/" className="flex items-center gap-2">
-          <span className="text-2xl">🍯</span>
-          <span className="text-lg font-bold tracking-tight text-foreground">
-            이사꿀팁
-          </span>
+        <a href="/" aria-label="이사꿀팁 홈">
+          <Logo size={32} textClassName="text-lg" />
         </a>
         <nav className="hidden items-center gap-6 sm:flex">
           <a
@@ -136,9 +134,8 @@ function Footer() {
         <div className="grid gap-8 md:grid-cols-3">
           {/* 브랜드 */}
           <div>
-            <div className="mb-3 flex items-center gap-2">
-              <span className="text-xl">🍯</span>
-              <span className="font-bold text-foreground">이사꿀팁</span>
+            <div className="mb-3">
+              <Logo size={28} textClassName="text-base" />
             </div>
             <p className="text-sm leading-relaxed text-muted-foreground">
               이사할 때 필요한 모든 정보를 한곳에서.
