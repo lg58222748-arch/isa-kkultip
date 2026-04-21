@@ -1,9 +1,11 @@
 import { Fragment } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { Clock, Tag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { blogPosts } from "@/data/blog-posts";
+import { getBlogImage } from "@/data/blog-images";
 import { InFeedAd, AdSlot } from "@/components/ads/AdSlot";
 
 export const metadata: Metadata = {
@@ -59,41 +61,52 @@ export default function BlogPage() {
             {index === 7 && <InFeedAd slot="blog-list-infeed-2" />}
             <Link
               href={`/blog/${post.slug}`}
-              className="group rounded-xl border border-border/60 bg-card p-5 transition-all hover:border-primary/30 hover:shadow-sm"
+              className="group overflow-hidden rounded-xl border border-border/60 bg-card transition-all hover:border-primary/30 hover:shadow-sm"
             >
-              <div className="flex items-center gap-2">
-                <span
-                  className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
-                    categoryColors[post.category] ?? "bg-muted text-muted-foreground"
-                  }`}
-                >
-                  {post.category}
-                </span>
-                <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                  <Clock className="h-3 w-3" />
-                  {post.readTime} 읽기
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  {post.date}
-                </span>
+              <div className="relative aspect-[16/9] w-full overflow-hidden bg-muted">
+                <Image
+                  src={getBlogImage(post.slug, post.category)}
+                  alt={post.title}
+                  fill
+                  sizes="(max-width: 640px) 100vw, 768px"
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                />
               </div>
-              <h2 className="mt-2 text-base font-bold text-foreground group-hover:text-primary sm:text-lg">
-                {post.title}
-              </h2>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground line-clamp-2">
-                {post.description}
-              </p>
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {post.tags.slice(0, 4).map((tag) => (
-                  <Badge
-                    key={tag}
-                    variant="outline"
-                    className="text-[10px] font-normal"
+              <div className="p-5">
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                      categoryColors[post.category] ?? "bg-muted text-muted-foreground"
+                    }`}
                   >
-                    <Tag className="mr-0.5 h-2.5 w-2.5" />
-                    {tag}
-                  </Badge>
-                ))}
+                    {post.category}
+                  </span>
+                  <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <Clock className="h-3 w-3" />
+                    {post.readTime} 읽기
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    {post.date}
+                  </span>
+                </div>
+                <h2 className="mt-2 text-base font-bold text-foreground group-hover:text-primary sm:text-lg">
+                  {post.title}
+                </h2>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground line-clamp-2">
+                  {post.description}
+                </p>
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {post.tags.slice(0, 4).map((tag) => (
+                    <Badge
+                      key={tag}
+                      variant="outline"
+                      className="text-[10px] font-normal"
+                    >
+                      <Tag className="mr-0.5 h-2.5 w-2.5" />
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
               </div>
             </Link>
           </Fragment>
