@@ -164,8 +164,12 @@ export default function PrivacyPolicyPage() {
 
         <Section title="9. 개인정보 보호책임자 및 연락처">
           <ul className="list-disc space-y-1 pl-5">
-            <li>서비스명: 이사꿀팁</li>
-            <li>이메일: contact@example.com</li>
+            <li>서비스명: 이사꿀팁 (주식회사 새집느낌)</li>
+            <li>대표자: 권선우</li>
+            <li>사업자등록번호: 370-86-03860</li>
+            <li>주소: 충청남도 천안시 두정동 1498 대우프라자</li>
+            <li>전화: 010-5763-3059</li>
+            <li>이메일: kplayer02@naver.com</li>
           </ul>
           <p className="mt-3">
             개인정보 처리에 관한 문의, 불만 처리, 피해 구제 등은 위 연락처로

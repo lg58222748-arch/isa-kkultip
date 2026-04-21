@@ -1,10 +1,12 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
-import { ArrowLeft, Clock, Tag, Share2 } from "lucide-react";
+import { ArrowLeft, Clock, Tag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { blogPosts } from "@/data/blog-posts";
-import { AdSlot, InArticleAd } from "@/components/ads/AdSlot";
+import { getBlogImage } from "@/data/blog-images";
+import { AdSlot } from "@/components/ads/AdSlot";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -111,6 +113,18 @@ export default async function BlogPostPage({ params }: Props) {
             <span className="text-xs text-muted-foreground">{post.date}</span>
           </div>
         </header>
+
+        {/* Hero Image */}
+        <div className="relative mb-8 aspect-[16/9] w-full overflow-hidden rounded-xl bg-muted">
+          <Image
+            src={getBlogImage(post.slug, post.category)}
+            alt={post.title}
+            fill
+            sizes="(max-width: 768px) 100vw, 768px"
+            priority
+            className="object-cover"
+          />
+        </div>
 
         {/* Ad: 헤더 아래 — 본문 읽기 전 자연스러운 위치 */}
         <div className="mb-6">
