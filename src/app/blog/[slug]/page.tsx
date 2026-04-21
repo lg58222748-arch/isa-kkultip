@@ -16,9 +16,19 @@ export async function generateStaticParams() {
   return blogPosts.map((post) => ({ slug: post.slug }));
 }
 
+function findPostBySlug(rawSlug: string) {
+  let decoded = rawSlug;
+  try {
+    decoded = decodeURIComponent(rawSlug);
+  } catch {
+    decoded = rawSlug;
+  }
+  return blogPosts.find((p) => p.slug === decoded || p.slug === rawSlug);
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = blogPosts.find((p) => p.slug === slug);
+  const post = findPostBySlug(slug);
   if (!post) return {};
 
   return {
@@ -37,7 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = blogPosts.find((p) => p.slug === slug);
+  const post = findPostBySlug(slug);
   if (!post) notFound();
 
   // Related posts
