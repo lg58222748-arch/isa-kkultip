@@ -1,7 +1,18 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
+import Script from "next/script";
 import "./globals.css";
-import { FloatingMatchButton } from "@/components/FloatingMatchButton";
 import { Logo } from "@/components/Logo";
+
+// Lazy-load the floating region picker — it carries ~15KB of region data
+// that's not needed for the initial paint. Deferring improves TTI & INP.
+const FloatingMatchButton = dynamic(
+  () =>
+    import("@/components/FloatingMatchButton").then((m) => ({
+      default: m.FloatingMatchButton,
+    })),
+  { ssr: true, loading: () => null },
+);
 
 export const metadata: Metadata = {
   title: {
@@ -43,19 +54,70 @@ export default function RootLayout({
       <head>
         <meta name="google-site-verification" content="rg-w1sgAAAU7c5sOivyOUCOTqFlEdX00vkEP0_AIJ_I" />
         <meta name="naver-site-verification" content="49944c5bc078683774a958e77243566a5c901e48" />
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6524877471660554" crossOrigin="anonymous" />
+
+        {/* Preconnect to external origins used on every page — shaves ~200ms off LCP */}
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://images.unsplash.com" />
+        <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+        <link rel="dns-prefetch" href="https://googleads.g.doubleclick.net" />
+
+        {/* Preload the Pretendard variable font stylesheet so text paints without FOIT */}
         <link
-          rel="stylesheet"
+          rel="preload"
           as="style"
           crossOrigin="anonymous"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
         />
+        <link
+          rel="stylesheet"
+          crossOrigin="anonymous"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+        />
+
       </head>
       <body className="min-h-full flex flex-col">
+        {/* Organization JSON-LD — improves Knowledge Graph + SEO */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "이사꿀팁",
+              alternateName: "주식회사 새집느낌",
+              url: "https://www.isamove.co.kr",
+              description:
+                "이사 순서 가이드, 업체 비교, 손 없는 날, 입주청소 비용 등 이사 준비에 필요한 모든 정보를 한곳에서 제공합니다.",
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "두정동 1498 대우프라자",
+                addressLocality: "천안시",
+                addressRegion: "충청남도",
+                addressCountry: "KR",
+              },
+              contactPoint: {
+                "@type": "ContactPoint",
+                telephone: "+82-10-5763-3059",
+                email: "kplayer02@naver.com",
+                contactType: "customer service",
+                areaServed: "KR",
+                availableLanguage: "Korean",
+              },
+            }),
+          }}
+        />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
         <FloatingMatchButton />
+
+        {/* AdSense loader — lazyOnload so it never blocks LCP/FCP */}
+        <Script
+          id="adsense-loader"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6524877471660554"
+          crossOrigin="anonymous"
+          strategy="lazyOnload"
+        />
       </body>
     </html>
   );
