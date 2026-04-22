@@ -131,7 +131,9 @@ export default async function BlogPostPage({ params }: Props) {
             alt={post.title}
             fill
             sizes="(max-width: 768px) 100vw, 768px"
+            quality={70}
             priority
+            fetchPriority="high"
             className="object-cover"
           />
         </div>
@@ -159,6 +161,8 @@ export default async function BlogPostPage({ params }: Props) {
                         alt={alt}
                         fill
                         sizes="(max-width: 768px) 100vw, 768px"
+                        quality={60}
+                        loading="lazy"
                         className="object-cover"
                       />
                     </div>

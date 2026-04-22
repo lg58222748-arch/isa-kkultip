@@ -145,6 +145,7 @@ export default function Home() {
             </div>
             <Link
               href="/map"
+              prefetch={false}
               className="text-xs font-medium text-primary hover:underline"
             >
               전체보기 &gt;
@@ -155,6 +156,7 @@ export default function Home() {
               <Link
                 key={provider.id}
                 href="/map"
+                prefetch={false}
                 className="flex gap-3 rounded-xl border border-border/60 bg-card p-4 transition-all hover:border-primary/30 hover:shadow-sm"
               >
                 <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-primary/10 text-lg font-bold text-primary">

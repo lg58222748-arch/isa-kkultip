@@ -69,9 +69,11 @@ export default function BlogPage() {
                   alt={post.title}
                   fill
                   sizes="(max-width: 640px) 100vw, 768px"
+                  quality={index === 0 ? 70 : 60}
                   priority={index === 0}
+                  fetchPriority={index === 0 ? "high" : "auto"}
                   loading={index === 0 ? "eager" : "lazy"}
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  className="object-cover motion-safe:transition-transform motion-safe:duration-300 motion-safe:group-hover:scale-105"
                 />
               </div>
               <div className="p-5">
