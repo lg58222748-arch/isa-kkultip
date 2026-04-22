@@ -1,11 +1,23 @@
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { ArrowRight, Star, Shield, CheckCircle2, Users, Clock, TrendingUp, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { categories } from "@/data/categories";
 import { providers } from "@/data/providers";
-import { MapBanner } from "@/components/map/MapBanner";
 import { momCafes } from "@/data/mom-cafes";
 import { AdSlot, AnchorAd } from "@/components/ads/AdSlot";
+
+// MapBanner pulls in the Naver Maps SDK (~150KB+) and isn't needed for LCP
+// since it sits below the hero. Dynamic import keeps the critical JS lean.
+const MapBanner = dynamic(
+  () => import("@/components/map/MapBanner").then((m) => ({ default: m.MapBanner })),
+  {
+    ssr: true,
+    loading: () => (
+      <div className="h-[320px] w-full animate-pulse rounded-xl bg-muted/40" />
+    ),
+  },
+);
 
 export default function Home() {
   const topProviders = providers.filter((p) => p.verified).slice(0, 6);

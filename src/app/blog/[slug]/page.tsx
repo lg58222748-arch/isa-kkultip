@@ -144,6 +144,33 @@ export default async function BlogPostPage({ params }: Props) {
         {/* Article Content */}
         <div className="prose-custom">
           {post.content.split("\n").map((line, i) => {
+            if (line.startsWith("![")) {
+              const match = line.match(/^!\[([^\]]*)\]\(([^)]+)\)/);
+              if (match) {
+                const [, alt, src] = match;
+                return (
+                  <figure
+                    key={i}
+                    className="my-6 overflow-hidden rounded-xl bg-muted"
+                  >
+                    <div className="relative aspect-[16/9] w-full">
+                      <Image
+                        src={src}
+                        alt={alt}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 768px"
+                        className="object-cover"
+                      />
+                    </div>
+                    {alt ? (
+                      <figcaption className="px-3 py-2 text-center text-xs text-muted-foreground">
+                        {alt}
+                      </figcaption>
+                    ) : null}
+                  </figure>
+                );
+              }
+            }
             if (line.startsWith("## ")) {
               return (
                 <h2

@@ -69,6 +69,8 @@ export default function BlogPage() {
                   alt={post.title}
                   fill
                   sizes="(max-width: 640px) 100vw, 768px"
+                  priority={index === 0}
+                  loading={index === 0 ? "eager" : "lazy"}
                   className="object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </div>

@@ -41,6 +41,19 @@ const SLUG_TO_IMAGE: Record<string, string> = {
   "post-move-organization": UNSPLASH("1519710164239-da123dc03ef4"),
   "moving-day-driver-etiquette": UNSPLASH("1484723091739-30a097e8f929"),
   "moving-stress-recovery": UNSPLASH("1556761175-5973dc0f32e7"),
+  "son-eopneun-nal-2026-01": UNSPLASH("1506784983877-45594efa4cbe"),
+  "son-eopneun-nal-2026-02": UNSPLASH("1554224155-6726b3ff858f"),
+  "son-eopneun-nal-2026-03": UNSPLASH("1568992687947-868a62a9f521"),
+  "son-eopneun-nal-2026-04": UNSPLASH("1520333789090-1afc82db536a"),
+  "son-eopneun-nal-2026-05": UNSPLASH("1506784983877-45594efa4cbe"),
+  "son-eopneun-nal-2026-06": UNSPLASH("1554224155-6726b3ff858f"),
+  "son-eopneun-nal-2026-07": UNSPLASH("1568992687947-868a62a9f521"),
+  "son-eopneun-nal-2026-08": UNSPLASH("1520333789090-1afc82db536a"),
+  "son-eopneun-nal-2026-09": UNSPLASH("1506784983877-45594efa4cbe"),
+  "son-eopneun-nal-2026-10": UNSPLASH("1554224155-6726b3ff858f"),
+  "son-eopneun-nal-2026-11": UNSPLASH("1568992687947-868a62a9f521"),
+  "son-eopneun-nal-2026-12": UNSPLASH("1520333789090-1afc82db536a"),
+  "packing-moving-real-case-study": "/img/packing/packing-02.webp",
 };
 
 export function getBlogImage(slug: string, category?: string): string {
