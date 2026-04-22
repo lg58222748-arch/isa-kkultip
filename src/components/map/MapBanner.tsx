@@ -19,9 +19,36 @@ export function MapBanner({
   totalCount: number;
 }) {
   const mapRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLAnchorElement>(null);
+  const [inView, setInView] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
+  // Defer everything until MapBanner scrolls into viewport (or near it).
+  // Home-page TBT drops by the full Naver Maps SDK parse/exec cost.
   useEffect(() => {
+    if (!wrapperRef.current) return;
+    const node = wrapperRef.current;
+
+    if (typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" }, // start fetching 200px before the element is visible
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!inView) return;
     const clientId = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID;
     if (!clientId) return;
 
@@ -32,7 +59,7 @@ export function MapBanner({
     script.async = true;
     script.onload = () => setLoaded(true);
     document.head.appendChild(script);
-  }, []);
+  }, [inView]);
 
   useEffect(() => {
     if (!loaded || !mapRef.current) return;
@@ -64,7 +91,9 @@ export function MapBanner({
 
   return (
     <Link
+      ref={wrapperRef}
       href="/map"
+      prefetch={false}
       className="group relative block overflow-hidden rounded-2xl border border-border/60 transition-all hover:border-primary/40 hover:shadow-lg"
     >
       <div className="relative h-[250px] w-full">

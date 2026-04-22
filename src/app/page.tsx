@@ -126,7 +126,7 @@ export default function Home() {
       {/* 지도로 업체를 직접 확인할 수 있다는 확신 제공 */}
       <section className="border-b border-border/40 px-4 py-10 sm:px-6">
         <div className="mx-auto max-w-4xl">
-          <MapBanner providers={providers.slice(0, 80)} totalCount={providers.length} />
+          <MapBanner providers={providers.slice(0, 20)} totalCount={providers.length} />
         </div>
       </section>
 
