@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import type { Provider } from "@/types/provider";
 
 declare global {
   interface Window {
@@ -11,11 +10,20 @@ declare global {
   }
 }
 
+// Narrow type — only the fields the map markers actually need. Keeps the RSC
+// payload to a few KB instead of shipping reviews/tags/descriptions to the client.
+export type MapPin = {
+  name: string;
+  lat: number;
+  lng: number;
+  rating: number;
+};
+
 export function MapBanner({
   providers,
   totalCount,
 }: {
-  providers: Provider[];
+  providers: MapPin[];
   totalCount: number;
 }) {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -23,8 +31,9 @@ export function MapBanner({
   const [inView, setInView] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
-  // Defer everything until MapBanner scrolls into viewport (or near it).
+  // Defer everything until MapBanner scrolls into viewport.
   // Home-page TBT drops by the full Naver Maps SDK parse/exec cost.
+  // rootMargin trimmed to 50px so the SDK fetch doesn't start during FCP window.
   useEffect(() => {
     if (!wrapperRef.current) return;
     const node = wrapperRef.current;
@@ -41,7 +50,7 @@ export function MapBanner({
           observer.disconnect();
         }
       },
-      { rootMargin: "200px" }, // start fetching 200px before the element is visible
+      { rootMargin: "50px" },
     );
     observer.observe(node);
     return () => observer.disconnect();

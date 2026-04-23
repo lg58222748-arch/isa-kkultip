@@ -131,7 +131,7 @@ export default async function BlogPostPage({ params }: Props) {
             alt={post.title}
             fill
             sizes="(max-width: 768px) 100vw, 768px"
-            quality={70}
+            quality={60}
             priority
             fetchPriority="high"
             className="object-cover"
