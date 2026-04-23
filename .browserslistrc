@@ -1,0 +1,8 @@
+# Drop polyfills for ancient browsers. Every supported user-agent has ES2020+.
+# Removes ~14 KiB of legacy JS from the bundle (per Lighthouse).
+> 0.5%
+last 2 versions
+not dead
+not op_mini all
+not ie 11
+not ie_mob 11

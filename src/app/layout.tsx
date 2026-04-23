@@ -56,25 +56,13 @@ export default function RootLayout({
         <meta name="google-site-verification" content="rg-w1sgAAAU7c5sOivyOUCOTqFlEdX00vkEP0_AIJ_I" />
         <meta name="naver-site-verification" content="49944c5bc078683774a958e77243566a5c901e48" />
 
-        {/* Preconnect to external origins used on every page — shaves ~200ms off LCP */}
-        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
+        {/* Preconnect only to origins actually used at first paint */}
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="dns-prefetch" href="https://googleads.g.doubleclick.net" />
-
-        {/* Preload the Pretendard variable font stylesheet so text paints without FOIT */}
-        <link
-          rel="preload"
-          as="style"
-          crossOrigin="anonymous"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
-        />
-        <link
-          rel="stylesheet"
-          crossOrigin="anonymous"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
-        />
-
+        {/* No external font CSS — globals.css falls back to Apple SD Gothic Neo /
+            Malgun Gothic / Noto Sans KR (all native on Korean devices). Eliminates
+            render-blocking jsdelivr request and ~53KB gzipped CSS fetch. */}
       </head>
       <body className="min-h-full flex flex-col">
         {/* Organization JSON-LD — improves Knowledge Graph + SEO */}
