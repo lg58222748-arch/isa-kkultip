@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useDeferredValue } from "react";
 import { providers } from "@/data/providers";
 import { NaverMap } from "@/components/map/NaverMap";
 import { ProviderDetail } from "@/components/map/ProviderDetail";
@@ -12,11 +12,8 @@ import {
   TrendingDown,
   Trophy,
   Flame,
-  Filter,
   X,
-  ChevronDown,
   Search,
-  Navigation,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import type { Provider } from "@/types/provider";
@@ -25,6 +22,7 @@ import { AdSlot } from "@/components/ads/AdSlot";
 type SortMode = "rating" | "reviews" | "price-low" | "price-high";
 
 const categoryOptions = [
+  { value: "all", label: "전체", icon: "🌐" },
   { value: "moving", label: "포장이사", icon: "📦" },
   { value: "cleaning", label: "입주청소", icon: "🧹" },
   { value: "grout", label: "줄눈시공", icon: "🔲" },
@@ -35,6 +33,11 @@ const categoryOptions = [
   { value: "sick-house", label: "새집증후군", icon: "🌿" },
   { value: "thermal-film", label: "단열필름", icon: "🪟" },
 ];
+
+// Hard cap on rendered list + map markers. Rendering 2000 provider rows blocks
+// the main thread for seconds on mobile. Users virtually never scroll past
+// the first ~50 results — 100 is a safe upper bound with room to sort/browse.
+const RESULT_LIMIT = 100;
 
 const sortOptions: { value: SortMode; label: string; icon: React.ReactNode }[] = [
   { value: "rating", label: "평점 높은순", icon: <Star className="h-3 w-3" /> },
@@ -52,16 +55,25 @@ const REGIONS = [
 
 export function MapPageClient() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [categoryFilter, setCategoryFilter] = useState("moving");
-  const [selectedRegions, setSelectedRegions] = useState<string[]>(["서울"]);
+  // "all" = 전체 카테고리. Default to 전체 so users see the full national set first.
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  // Empty array = 전체 지역 (no region filter). Default to nationwide.
+  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
   const [searchText, setSearchText] = useState("");
+  // useDeferredValue naturally debounces expensive filter work during typing.
+  // React renders the input with the fresh value while filter recomputes lazily.
+  const deferredSearch = useDeferredValue(searchText);
   const [sortMode, setSortMode] = useState<SortMode>("rating");
   const [showDetail, setShowDetail] = useState(false);
   const [onlyVerified, setOnlyVerified] = useState(false);
   const [showCompare, setShowCompare] = useState(false);
 
-  const filteredProviders = useMemo(() => {
-    let list = providers.filter((p) => p.category === categoryFilter);
+  // Returns { list, total } — `list` is capped at RESULT_LIMIT for render,
+  // `total` reflects the true match count so the UI can say "N개 중 100개 표시".
+  const filteredResult = useMemo(() => {
+    let list = categoryFilter === "all"
+      ? providers
+      : providers.filter((p) => p.category === categoryFilter);
 
     if (selectedRegions.length > 0) {
       list = list.filter((p) =>
@@ -69,8 +81,8 @@ export function MapPageClient() {
       );
     }
 
-    if (searchText.trim()) {
-      const q = searchText.trim().toLowerCase();
+    const q = deferredSearch.trim().toLowerCase();
+    if (q) {
       list = list.filter((p) =>
         p.name.toLowerCase().includes(q) ||
         p.address.toLowerCase().includes(q) ||
@@ -80,7 +92,8 @@ export function MapPageClient() {
 
     if (onlyVerified) list = list.filter((p) => p.verified);
 
-    list.sort((a, b) => {
+    // Sort a shallow copy so we don't mutate the original providers array.
+    const sorted = [...list].sort((a, b) => {
       switch (sortMode) {
         case "rating": return b.rating - a.rating;
         case "reviews": return b.reviewCount - a.reviewCount;
@@ -89,9 +102,11 @@ export function MapPageClient() {
       }
     });
 
-    // 2000개 중 최대 200개만 표시 (성능)
-    return list;
-  }, [categoryFilter, selectedRegions, searchText, sortMode, onlyVerified]);
+    return { list: sorted.slice(0, RESULT_LIMIT), total: sorted.length };
+  }, [categoryFilter, selectedRegions, deferredSearch, sortMode, onlyVerified]);
+
+  const filteredProviders = filteredResult.list;
+  const totalMatches = filteredResult.total;
 
   const selectedProvider = useMemo(
     () => providers.find((p) => p.id === selectedId) ?? null,
@@ -114,10 +129,12 @@ export function MapPageClient() {
     return [...providers].sort((a, b) => b.rating - a.rating || b.reviewCount - a.reviewCount).slice(0, 3);
   }, []);
 
-  function handleSelect(id: string) {
+  // Stable reference keeps NaverMap's marker-rebind effect from re-running on
+  // every MapPageClient render (each rerun iterates every visible provider).
+  const handleSelect = useCallback((id: string) => {
     setSelectedId(id);
     setShowDetail(true);
-  }
+  }, []);
 
   return (
     <div className="flex h-[calc(100vh-4rem)] flex-col lg:flex-row">
@@ -140,14 +157,17 @@ export function MapPageClient() {
         {/* Region Multi-Select */}
         <div className="border-b border-border/60 p-2">
           <div className="flex flex-wrap gap-1">
-            {selectedRegions.length > 0 && (
-              <button
-                onClick={() => { setSelectedRegions([]); setSelectedId(null); setShowDetail(false); }}
-                className="rounded-full bg-destructive/10 px-2 py-0.5 text-[10px] font-medium text-destructive hover:bg-destructive/20"
-              >
-                ✕ 전체해제
-              </button>
-            )}
+            {/* 전체 pill — clears all region filters */}
+            <button
+              onClick={() => { setSelectedRegions([]); setSelectedId(null); setShowDetail(false); }}
+              className={`rounded-full px-2 py-0.5 text-[10px] font-medium transition-colors ${
+                selectedRegions.length === 0
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground hover:bg-accent"
+              }`}
+            >
+              전체
+            </button>
             {REGIONS.map((r) => (
               <button
                 key={r}
@@ -227,8 +247,12 @@ export function MapPageClient() {
 
         {/* Stats Bar */}
         <div className="flex items-center gap-3 border-b border-border/40 bg-muted/30 px-3 py-2 text-[11px] text-muted-foreground">
-          <span>{filteredProviders.length}개 업체</span>
-          {lowestByCategory[categoryFilter] && (
+          <span>
+            {totalMatches > RESULT_LIMIT
+              ? `${totalMatches}개 중 상위 ${RESULT_LIMIT}개 표시`
+              : `${totalMatches}개 업체`}
+          </span>
+          {categoryFilter !== "all" && lowestByCategory[categoryFilter] && (
             <span className="inline-flex items-center gap-1 text-primary">
               <TrendingDown className="h-3 w-3" />
               최저가 {lowestByCategory[categoryFilter].priceLabel}
