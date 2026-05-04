@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
-import Script from "next/script";
 import "./globals.css";
 import { Logo } from "@/components/Logo";
-import { ADSENSE_CLIENT_ID, IS_PRODUCTION } from "@/components/ads/AdSlot";
 
 // Lazy-load the floating region picker — it carries ~15KB of region data
 // that's not needed for the initial paint. Deferring improves TTI & INP.
@@ -55,6 +53,14 @@ export default function RootLayout({
       <head>
         <meta name="google-site-verification" content="rg-w1sgAAAU7c5sOivyOUCOTqFlEdX00vkEP0_AIJ_I" />
         <meta name="naver-site-verification" content="49944c5bc078683774a958e77243566a5c901e48" />
+        <meta name="google-adsense-account" content="ca-pub-6524877471660554" />
+
+        {/* Google AdSense — must be in <head> for crawler verification & approval */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6524877471660554"
+          crossOrigin="anonymous"
+        />
 
         {/* Preconnect only to origins actually used at first paint */}
         <link rel="preconnect" href="https://images.unsplash.com" />
@@ -100,17 +106,6 @@ export default function RootLayout({
         <Footer />
         <FloatingMatchButton />
 
-        {/* AdSense loader — only loaded when real ads are enabled.
-            While IS_PRODUCTION is false we ship zero AdSense bytes, which is
-            worth ~500ms of mobile TBT. Flip the flag once IS_PRODUCTION=true. */}
-        {IS_PRODUCTION && (
-          <Script
-            id="adsense-loader"
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
-            crossOrigin="anonymous"
-            strategy="lazyOnload"
-          />
-        )}
       </body>
     </html>
   );

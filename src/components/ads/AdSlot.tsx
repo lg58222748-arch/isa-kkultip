@@ -16,7 +16,7 @@ export const ADSENSE_CLIENT_ID = "ca-pub-6524877471660554";
  * - false: 플레이스홀더만 표시 (AdSense 스크립트도 로드하지 않음 → 모바일 TBT 절감)
  * - true: 실제 광고 + AdSense 스크립트 로드
  */
-export const IS_PRODUCTION = false;
+export const IS_PRODUCTION = true;
 
 type AdFormat =
   | "horizontal"     // 가로 배너 (728x90) — 섹션 사이
