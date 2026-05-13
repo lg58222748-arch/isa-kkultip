@@ -357,6 +357,87 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ─── 8단계: SEO 본문 (Long-form Content) ─── */}
+      {/* AdSense·Google 검색을 위한 사이트 가치 설명 본문 */}
+      <section className="border-t border-border/40 bg-background px-4 py-12 sm:px-6 sm:py-16">
+        <article className="mx-auto max-w-3xl prose-custom">
+          <h2 className="mb-4 text-xl font-bold tracking-tight text-foreground sm:text-2xl">
+            이사꿀팁이 만드는 더 쉬운 이사 경험
+          </h2>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            이사는 인생에서 손꼽히는 중요한 이벤트지만, 정보가 너무 흩어져 있어
+            많은 분들이 무엇부터 시작해야 할지 막막함을 느낍니다. 사전점검, 탄성코트,
+            줄눈시공, 입주청소, 새집증후군 제거, 나노코팅, 단열필름, 그리고 이사까지
+            — 새 아파트 입주만 해도 8단계 시공 일정을 짜야 하고, 구축아파트
+            리모델링은 11단계의 공사 순서를 이해해야 합니다. 이사꿀팁은 이런
+            복잡한 과정을 누구나 이해할 수 있도록 단계별로 정리하고, 전국
+            검증된 이사 관련 업체를 한곳에서 비교할 수 있도록 만들었습니다.
+          </p>
+          <h3 className="mb-3 mt-8 text-base font-bold text-foreground">
+            왜 이사꿀팁을 만들었나요?
+          </h3>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            저희 운영진도 처음 이사를 준비할 때 같은 어려움을 겪었습니다.
+            네이버 카페, 블로그, 유튜브를 며칠씩 검색해도 정확한 정보를 찾기
+            어려웠고, 업체 견적은 같은 조건이어도 두 배 가까이 차이가 났습니다.
+            특히 시공 순서를 모르고 진행해서 입주청소를 두 번 해야 했던 경험이
+            가장 아쉬웠습니다. 이사꿀팁은 이런 시행착오를 다른 분들이 겪지
+            않도록, 모든 정보를 한곳에 정리하는 것을 목표로 시작되었습니다.
+          </p>
+          <h3 className="mb-3 mt-8 text-base font-bold text-foreground">
+            어떤 정보를 제공하나요?
+          </h3>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            이사꿀팁은 크게 네 가지 종류의 정보를 제공합니다. 첫째,
+            <strong className="text-foreground"> 새아파트와 구축아파트 단계별 가이드</strong>로
+            언제 어떤 시공을 해야 하는지, 비용은 얼마인지, 주의 사항은
+            무엇인지 정리합니다. 둘째,
+            <strong className="text-foreground"> 전국 이사 관련 업체 지도</strong>에서
+            사전점검, 줄눈시공, 입주청소, 포장이사 등 카테고리별로 평점과
+            후기를 비교할 수 있습니다. 셋째,
+            <strong className="text-foreground"> 50편 이상의 이사 꿀팁 블로그</strong>는
+            평형별 비용, 손 없는 날, 이사 사기 방지, 전입신고 등 실생활
+            정보를 다룹니다. 마지막으로
+            <strong className="text-foreground"> 지역별 맘카페 모음</strong>으로
+            새 동네 정보를 빠르게 얻을 수 있도록 돕습니다.
+          </p>
+          <h3 className="mb-3 mt-8 text-base font-bold text-foreground">
+            누구에게 도움이 되나요?
+          </h3>
+          <ul className="ml-5 list-disc space-y-1 text-sm leading-relaxed text-muted-foreground">
+            <li><strong className="text-foreground">새 아파트 입주 예정자</strong>: 사전점검부터 입주까지 8단계 일정과 시공 순서, 단계별 비용 정보</li>
+            <li><strong className="text-foreground">구축아파트 리모델링 계획자</strong>: 철거부터 마감까지 11단계 공사 순서와 견적 비교</li>
+            <li><strong className="text-foreground">첫 자취 시작 대학생·신입사원</strong>: 원룸·투룸 이사 비용, 보증금 보호, 전입신고 등 기초 정보</li>
+            <li><strong className="text-foreground">전세·월세 이사 가구</strong>: 보증금 반환, 임대차 보호법, 계약 만료 시 주의사항</li>
+            <li><strong className="text-foreground">장거리 이사 예정자</strong>: 지방·서울 간 이사 비용 산정과 시간대별 견적 비교</li>
+            <li><strong className="text-foreground">이사 업체 입점 희망 사업자</strong>: 무료 입점으로 신규 고객 확보 기회</li>
+          </ul>
+          <h3 className="mb-3 mt-8 text-base font-bold text-foreground">
+            이사꿀팁의 정보는 어떻게 검증되나요?
+          </h3>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            저희가 제공하는 비용 정보는 2026년 기준 전국 이사 업체 견적 평균
+            데이터를 분기별로 업데이트합니다. 단계별 가이드는 실제 입주민과
+            인테리어 시공자의 후기를 종합해 작성되며, 새로운 정보가 확인되면
+            즉시 반영됩니다. 업체 정보는 카카오·네이버 로컬 API를 활용해
+            전국 49개 도시에서 수집했고, 사용자 후기와 평점을 함께 표시합니다.
+            저희는 특정 업체로부터 후원이나 광고비를 받지 않으며, 모든 콘텐츠는
+            중립적으로 운영됩니다.
+          </p>
+          <h3 className="mb-3 mt-8 text-base font-bold text-foreground">
+            바로 시작하기
+          </h3>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            회원가입 없이 모든 정보를 무료로 이용할 수 있습니다. 새 아파트
+            입주를 준비 중이라면 위의 새아파트 가이드를, 구축아파트 리모델링을
+            계획 중이라면 구축아파트 가이드를 확인하세요. 인근 업체를 비교하고
+            싶다면 업체 지도를, 자세한 이사 정보가 필요하다면 블로그 메뉴를
+            방문하시면 됩니다. 궁금한 점은 010-5763-3059 또는
+            kplayer02@naver.com으로 언제든 문의해 주세요.
+          </p>
+        </article>
+      </section>
+
       {/* Ad: 모바일 하단 고정 앵커 */}
       <AnchorAd slot="global-anchor" />
     </>
