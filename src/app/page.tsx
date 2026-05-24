@@ -1,10 +1,11 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { ArrowRight, Star, Shield, CheckCircle2, Users, Clock, TrendingUp, MapPin } from "lucide-react";
+import { ArrowRight, Star, Shield, CheckCircle2, Users, Clock, TrendingUp, MapPin, Tag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { categories } from "@/data/categories";
 import { providers } from "@/data/providers";
 import { momCafes } from "@/data/mom-cafes";
+import { blogPosts } from "@/data/blog-posts";
 import { AdSlot, AnchorAd } from "@/components/ads/AdSlot";
 
 // MapBanner pulls in the Naver Maps SDK (~150KB+) and isn't needed for LCP
@@ -23,6 +24,10 @@ export default function Home() {
   const topProviders = providers.filter((p) => p.verified).slice(0, 6);
   const totalReviews = providers.reduce((sum, p) => sum + p.reviewCount, 0);
   const topCafes = momCafes.slice(0, 6);
+  // 최신 블로그 글 6개 (날짜 내림차순)
+  const latestPosts = [...blogPosts]
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .slice(0, 6);
 
   return (
     <>
@@ -354,6 +359,71 @@ export default function Home() {
           <p className="mt-4 text-xs text-muted-foreground">
             회원가입 없이 바로 이용 가능합니다
           </p>
+        </div>
+      </section>
+
+      {/* ─── 최신 블로그 글 (최신 6편 노출) ─── */}
+      {/* AdSense·검색을 위한 신선한 콘텐츠 노출 + 내부 링크 강화 */}
+      <section className="border-t border-border/40 bg-muted/20 px-4 py-12 sm:px-6 sm:py-16">
+        <div className="mx-auto max-w-5xl">
+          <div className="mb-8 flex items-end justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
+                최신 이사 꿀팁 블로그
+              </h2>
+              <p className="mt-1.5 text-sm text-muted-foreground">
+                매주 업데이트되는 실전 이사 정보를 가장 먼저 확인하세요
+              </p>
+            </div>
+            <Link
+              href="/blog"
+              className="inline-flex flex-shrink-0 items-center gap-1 text-sm font-semibold text-primary hover:underline"
+            >
+              전체 보기
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {latestPosts.map((post) => (
+              <Link
+                key={post.slug}
+                href={`/blog/${post.slug}`}
+                className="group flex flex-col rounded-xl border border-border/60 bg-card p-5 transition-all hover:border-primary/30 hover:shadow-sm"
+              >
+                <div className="mb-2 flex items-center gap-2">
+                  <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
+                    {post.category}
+                  </span>
+                  <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
+                    <Clock className="h-3 w-3" />
+                    {post.readTime}
+                  </span>
+                  <span className="text-[11px] text-muted-foreground">
+                    {post.date}
+                  </span>
+                </div>
+                <h3 className="text-base font-bold leading-snug text-foreground group-hover:text-primary">
+                  {post.title}
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground line-clamp-3">
+                  {post.description}
+                </p>
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {post.tags.slice(0, 3).map((tag) => (
+                    <Badge
+                      key={tag}
+                      variant="outline"
+                      className="text-[10px] font-normal"
+                    >
+                      <Tag className="mr-0.5 h-2.5 w-2.5" />
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 

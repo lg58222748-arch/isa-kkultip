@@ -53,9 +53,9 @@ export default function BlogPage() {
         )}
       </div>
 
-      {/* Blog Post List */}
+      {/* Blog Post List — 최신 날짜 순으로 정렬 */}
       <div className="flex flex-col gap-4">
-        {blogPosts.map((post, index) => (
+        {[...blogPosts].sort((a, b) => b.date.localeCompare(a.date)).map((post, index) => (
           <Fragment key={post.slug}>
             {index === 3 && <InFeedAd slot="blog-list-infeed-1" />}
             {index === 7 && <InFeedAd slot="blog-list-infeed-2" />}
