@@ -205,6 +205,8 @@ function Footer() {
               <a href="/community" className="hover:text-foreground">맘카페</a>
               <a href="/register" className="hover:text-foreground">업체 입점</a>
               <a href="/about" className="hover:text-foreground">회사 소개</a>
+              <a href="/editorial" className="hover:text-foreground">편집 원칙</a>
+              <a href="/contact" className="hover:text-foreground">문의하기</a>
             </div>
           </div>
 
