@@ -57,8 +57,7 @@ export default function BlogPage() {
       <div className="flex flex-col gap-4">
         {[...blogPosts].sort((a, b) => b.date.localeCompare(a.date)).map((post, index) => (
           <Fragment key={post.slug}>
-            {index === 3 && <InFeedAd slot="blog-list-infeed-1" />}
-            {index === 7 && <InFeedAd slot="blog-list-infeed-2" />}
+            {index === 5 && <InFeedAd slot="blog-list-infeed-1" />}
             <Link
               href={`/blog/${post.slug}`}
               className="group overflow-hidden rounded-xl border border-border/60 bg-card transition-all hover:border-primary/30 hover:shadow-sm"

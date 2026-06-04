@@ -34,6 +34,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${step.title} - 구축아파트 이사 ${step.order}단계`,
     description: step.subtitle + ". " + step.description.slice(0, 120),
+    // 데이터 기반 템플릿 페이지는 noindex — 검색엔진은 블로그·메인 가이드만 인덱싱
+    // (사용자 내비게이션용으로는 그대로 유지)
+    robots: { index: false, follow: true },
   };
 }
 

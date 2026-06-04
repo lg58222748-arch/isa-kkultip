@@ -122,10 +122,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Ad: 카테고리 아래 가로 배너 — 섹션 전환 사이 자연스러운 위치 */}
-      <div className="mx-auto max-w-4xl px-4 py-3 sm:px-6">
-        <AdSlot slot="home-below-categories" format="horizontal" />
-      </div>
+      {/* AdSense 승인 대기 중 — 광고 슬롯 축소 (본문 콘텐츠 비중 높이기) */}
 
       {/* ─── 3단계: 확신 (Conviction) ─── */}
       {/* 지도로 업체를 직접 확인할 수 있다는 확신 제공 */}
@@ -326,11 +323,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Ad: 소셜프루프 아래 리더보드 */}
-      <div className="mx-auto max-w-4xl px-4 py-3 sm:px-6">
-        <AdSlot slot="home-before-cta" format="leaderboard" />
-      </div>
-
       {/* ─── 7단계: 행동 (Action) ─── */}
       <section className="border-t border-border/40 bg-gradient-to-b from-primary/5 to-background px-4 py-12 sm:px-6 sm:py-16">
         <div className="mx-auto max-w-2xl text-center">
@@ -508,8 +500,7 @@ export default function Home() {
         </article>
       </section>
 
-      {/* Ad: 모바일 하단 고정 앵커 */}
-      <AnchorAd slot="global-anchor" />
+      {/* AdSense 승인 후 앵커 광고 활성화 예정 — 신규 사이트 sticky 광고는 거절 위험 */}
     </>
   );
 }

@@ -1,7 +1,5 @@
 import type { MetadataRoute } from "next";
 import { blogPosts } from "@/data/blog-posts";
-import { newApartmentSteps } from "@/data/new-apartment-steps";
-import { oldApartmentSteps } from "@/data/old-apartment-steps";
 
 const BASE_URL = "https://isamove.co.kr";
 
@@ -70,28 +68,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  const newApartmentRoutes: MetadataRoute.Sitemap = newApartmentSteps.map(
-    (step) => ({
-      url: `${BASE_URL}/new-apartment/${step.slug}`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.7,
-    })
-  );
-
-  const oldApartmentRoutes: MetadataRoute.Sitemap = oldApartmentSteps.map(
-    (step) => ({
-      url: `${BASE_URL}/old-apartment/${step.slug}`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.7,
-    })
-  );
+  // Step 페이지(new-apartment/[step], old-apartment/[step])는 데이터 기반 템플릿이라
+  // 사이트맵에서 제외 — 인덱싱 대상은 블로그·메인 가이드만 유지
+  // 사용자 내비게이션(메인 가이드 페이지의 단계 카드)은 그대로 동작
 
   return [
     ...staticRoutes,
     ...blogRoutes,
-    ...newApartmentRoutes,
-    ...oldApartmentRoutes,
   ];
 }

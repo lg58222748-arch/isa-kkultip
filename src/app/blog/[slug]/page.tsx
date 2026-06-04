@@ -125,7 +125,7 @@ export default async function BlogPostPage({ params }: Props) {
         </header>
 
         {/* Hero Image */}
-        <div className="relative mb-8 aspect-[16/9] w-full overflow-hidden rounded-xl bg-muted">
+        <div className="relative mb-6 aspect-[16/9] w-full overflow-hidden rounded-xl bg-muted">
           <Image
             src={getBlogImage(post.slug, post.category)}
             alt={post.title}
@@ -138,10 +138,26 @@ export default async function BlogPostPage({ params }: Props) {
           />
         </div>
 
-        {/* Ad: 헤더 아래 — 본문 읽기 전 자연스러운 위치 */}
-        <div className="mb-6">
-          <AdSlot slot="blog-above-content" format="horizontal" />
+        {/* Author / 작성자 정보 — E-E-A-T 신호 */}
+        <div className="mb-8 flex items-center justify-between rounded-xl border border-border/60 bg-muted/30 p-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-base font-bold text-primary">
+              꿀
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-foreground">이사꿀팁 편집팀</p>
+              <p className="text-[11px] text-muted-foreground">
+                실제 입주민 인터뷰와 업체 견적 데이터를 기반으로 작성
+              </p>
+            </div>
+          </div>
+          <div className="hidden text-right text-[11px] text-muted-foreground sm:block">
+            <p>발행일: {post.date}</p>
+            <p>분기별 시세 업데이트</p>
+          </div>
         </div>
+
+        {/* AdSense 승인 대기 중 — 본문 위 광고 제거 (콘텐츠 우선) */}
 
         {/* Article Content */}
         <div className="prose-custom">
@@ -326,10 +342,7 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
         )}
 
-        {/* Ad: 페이지 최하단 배너 */}
-        <div className="mt-8">
-          <AdSlot slot="blog-page-bottom" format="leaderboard" />
-        </div>
+        {/* AdSense 승인 대기 중 — 페이지 최하단 광고 제거 (관련 글이 마지막 노출) */}
       </article>
     </>
   );
