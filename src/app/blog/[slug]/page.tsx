@@ -2,11 +2,12 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
-import { ArrowLeft, Clock, Tag } from "lucide-react";
+import { ArrowLeft, Clock, Tag, Home, ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { blogPosts } from "@/data/blog-posts";
 import { getBlogImage } from "@/data/blog-images";
 import { AdSlot } from "@/components/ads/AdSlot";
+import { ReferenceSources } from "@/components/blog/ReferenceSources";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -58,7 +59,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <>
-      {/* JSON-LD for SEO */}
+      {/* JSON-LD for SEO — Article + BreadcrumbList */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -68,27 +69,74 @@ export default async function BlogPostPage({ params }: Props) {
             headline: post.title,
             description: post.description,
             datePublished: post.date,
+            dateModified: post.date,
+            keywords: post.tags.join(", "),
+            articleSection: post.category,
             author: {
               "@type": "Organization",
-              name: "이사꿀팁",
+              name: "이사꿀팁 편집팀",
+              url: "https://isamove.co.kr/about",
             },
             publisher: {
               "@type": "Organization",
               name: "이사꿀팁",
+              url: "https://isamove.co.kr",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://isamove.co.kr/favicon.ico",
+              },
             },
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": `https://isamove.co.kr/blog/${post.slug}`,
+            },
+          }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "홈", item: "https://isamove.co.kr/" },
+              { "@type": "ListItem", position: 2, name: "블로그", item: "https://isamove.co.kr/blog" },
+              { "@type": "ListItem", position: 3, name: post.category },
+              { "@type": "ListItem", position: 4, name: post.title, item: `https://isamove.co.kr/blog/${post.slug}` },
+            ],
           }),
         }}
       />
 
       <article className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12">
-        {/* Breadcrumb */}
-        <Link
-          href="/blog"
-          className="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          블로그 목록
-        </Link>
+        {/* Breadcrumb — navigation 신호 + 구조화 데이터 */}
+        <nav aria-label="페이지 경로" className="mb-6">
+          <ol className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground">
+            <li>
+              <Link href="/" className="inline-flex items-center gap-1 hover:text-foreground">
+                <Home className="h-3 w-3" />
+                홈
+              </Link>
+            </li>
+            <li><ChevronRight className="h-3 w-3" /></li>
+            <li>
+              <Link href="/blog" className="hover:text-foreground">
+                블로그
+              </Link>
+            </li>
+            <li><ChevronRight className="h-3 w-3" /></li>
+            <li>
+              <span className="rounded-full bg-muted px-2 py-0.5 font-medium text-foreground">
+                {post.category}
+              </span>
+            </li>
+            <li><ChevronRight className="h-3 w-3" /></li>
+            <li className="max-w-[200px] truncate text-foreground">
+              {post.title}
+            </li>
+          </ol>
+        </nav>
 
         {/* Article Header */}
         <header className="mb-8">
@@ -313,6 +361,9 @@ export default async function BlogPostPage({ params }: Props) {
         <div className="mt-8">
           <AdSlot slot="blog-below-cta" format="multiplex" />
         </div>
+
+        {/* 참고 자료 — E-E-A-T Trustworthiness 신호 */}
+        <ReferenceSources category={post.category} />
 
         {/* Related Posts */}
         {related.length > 0 && (
